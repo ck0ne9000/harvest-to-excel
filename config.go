@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"time"
 
+	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 )
 
@@ -64,6 +65,13 @@ func loadConfig() (Config, error) {
 	if err := viper.Unmarshal(&config); err != nil {
 		return Config{}, err
 	}
-	fmt.Println(config)
+
+	year := time.Now().Year()
+	month := time.Now().Month()
+
+	pflag.IntVar(&config.Excel.Month, "month", int(month), "month to create the timesheet for")
+	pflag.IntVar(&config.Excel.Year, "year", year, "year to create the timesheet for")
+	pflag.Parse()
+
 	return config, nil
 }
